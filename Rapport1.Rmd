@@ -5,6 +5,7 @@ header-includes:
    - \usepackage{booktabs}
    - \usepackage{fancyhdr}
    - \usepackage{caption}
+   - \usepackage{geometry}
 output:
   pdf_document: default
   html_document:
@@ -13,12 +14,14 @@ output:
 fontsize: 12pt
 numbersections: true
 fig_caption: yes
+geometry: margin=2.5cm
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(rmarkdown)
 library(knitr)
+
 ```
 
 \setlength{\parskip}{0em}
@@ -36,11 +39,10 @@ library(knitr)
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
-setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
+# setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
 # setwd("C:\\Users\\Emile....")
 # setwd("C:\\Users\\Hugo....")
-# setwd("C:\\Users\\Guilaume......")
-
+setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 # Clear variables
 rm(list=ls(all=TRUE))
 # Load Data
@@ -52,7 +54,8 @@ L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pe
 puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes !
 
 \section{Introduction}
-Guillaume
+Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by V.T. Huang, J.B. Lindamood and P.M.T. Hansen in a paper they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
+To prevent this situation, they evaluated the quality of the baffer used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We developed a model to clarify the relationship between these elements  
 
 \section{Multiple regression analysis}
 \subsection{Pairwise simple correlations}
