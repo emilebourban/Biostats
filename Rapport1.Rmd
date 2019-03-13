@@ -21,7 +21,7 @@ geometry: margin=2.5cm
 knitr::opts_chunk$set(echo = TRUE)
 library(rmarkdown)
 library(knitr)
-
+library(xtable)
 ```
 
 \setlength{\parskip}{0em}
@@ -33,16 +33,19 @@ library(knitr)
 \rfoot{Page \thepage}
 
 \begin{center}
-\LARGE{\bfseries{Applied Biostatistics - Regression - Ice cream}}
+\LARGE{\bfseries{Give your work a meaningful title (not "Logistic regression")
+I should be able to tell what your project is about without reading past the title.
+Une idéé qqun ??}}
 \end{center}
 
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
-# setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
+ setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
 # setwd("C:\\Users\\Emile....")
 # setwd("C:\\Users\\Hugo....")
-setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
+# setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
+
 # Clear variables
 rm(list=ls(all=TRUE))
 # Load Data
@@ -64,6 +67,18 @@ Blablbabla
 
 ```{r pairwise regression, echo=FALSE, results="hide", fig.cap="\\label{fig:correlations} Pairwise scatter plot for all variables"}
 pairs( ~ moisture + protein + ash, data=icecream)
+```
+
+```{r covariances and correlations, echo=FALSE, results="hide"}
+cov(icecream[c(2,3,4)])
+cor(icecream[c(2,3,4)])
+
+covariances <- round(cov(icecream[c(2,3,4)]))
+correlations <- round(cor(icecream[c(2,3,4)]))
+
+# covtable <- kable(xtable(covariances), format = "latex", booktabs = TRUE)
+# cortable <- kable(xtable(correlations),format = "latex", booktabs = TRUE
+
 
 ```
 
