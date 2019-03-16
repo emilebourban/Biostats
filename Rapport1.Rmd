@@ -34,17 +34,15 @@ library(xtable)
 \rfoot{Page \thepage}
 
 \begin{center}
-\LARGE{\bfseries{Give your work a meaningful title (not "Logistic regression")
-I should be able to tell what your project is about without reading past the title.
-Une idéé qqun ??}}
+\LARGE{\bfseries{Finding the best parametrization model for ice cream blatter}}
 \end{center}
 
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
- setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
+# setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
 # setwd("C:\\Users\\Emile....")
-# setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
+ setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
 # setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 
 # Clear variables
@@ -54,7 +52,7 @@ icecream <- read.csv("icecream.csv")
 str(icecream)
 ```
 
-L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes !
+<!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
 
 \section{Introduction}
 Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by V.T. Huang, J.B. Lindamood and P.M.T. Hansen in a paper they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
@@ -101,24 +99,54 @@ Emile
 \subsubsection{Backward selection} 
 Emile
 
-\subsection{Regression diagnostics}
-Hugo
+\section{Regression diagnostics}
+We have now selected a plausible best model for blatter bakery. However, we have to ensure this model is robust and well suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
+\subsection{Q-Q plot}
+```{r , echo=FALSE, results="hide", fig.cap="\\label{fig::QQ}Normal Q-Q plot for the residuals from the lmbest", fig.align="center", fig.pos="H"}
 
-\subsection{Conclusion}
+lm_best <- lm(viscosity ~ moisture + protein + ash, data=icecream)
+tmp <- qqnorm(residuals(lm_best), pch=20, main="Normal Q-Q plot, residuals from best model")
+qqline(residuals(lm_best))
+diff <- (tmp$x - tmp$y)
+###display value too far from line
+text(tmp$x,tmp$y,ifelse((abs(diff)>20), names(diff),""), pos=3)
+rm(tmp,diff)
+
+```
+We display the Q-Q plot to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
+The labeled points are those that deveviate the most from the line and represent the extreme cases. [Explain why ...]
+\subsection{Observed vs Fitted}
+```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Fitted vs observed ratio", out.extra='trim={0 0.7cm 0 0.7cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
+###observed vs fitted
+plot(icecream$viscosity ~ fitted(lm_best), pch=20, xlab="Fitted", ylab="Observed", main="Observed vs Fitted viscosity")
+abline(0,1); grid(col="black")
+par(mfrow=c(1,1))
+```
+We need to compare the actual outputs of our chosen model with the observed values. This comparison is represented in Figure 3.
+The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as a lot of points are quite far from this ideal line. Our model is therefore not optimal, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
+
+\subsection{Variance inflation factor}
+Variance Inflation factor, or simply put VIF, will allow us to check for depedancies among our factors (multicolinearity). If this is the case, we will remove certain factors that would add redundancies in our model.A VIF above 5 is to be considered a caution and above 10 as a clear sign of multicolinearity.
+Let's use VIF on our best model:
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+require(car)
+kable(vif(lm_best), col.names = c("VIF"))
+
+```
+
+We can see that the values are even below 5, indicating no colinearity amoung these three factors. Hence, our model does not contain too much parameter, or at least dependant factors. Therefore, VIF cannot really explain the difference between our model outputs and the observed data from figure 3.
+\section{Conclusion}
 ????
 
 
 
-```{r cars}
-summary(cars)
-```
+<!-- ## Including Plots -->
 
-## Including Plots
+<!-- You can also embed plots, for example: -->
 
-You can also embed plots, for example:
+<!-- ```{r pressure, echo=FALSE} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->
