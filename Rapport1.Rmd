@@ -54,7 +54,7 @@ str(icecream)
 <!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
 
 \section{Introduction}
-Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
+Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
 To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements  .
 
 \section{Multiple regression analysis}
