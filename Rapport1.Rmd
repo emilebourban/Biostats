@@ -41,8 +41,9 @@ library(xtable)
 # Set the working directory :
 
 # setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
-# setwd("C:\\Users\\Emile....")# setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
-setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
+# setwd("C:\\Users\\Emile....")
+ setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
+# setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 
 # Clear variables
 rm(list=ls(all=TRUE))
@@ -103,9 +104,9 @@ We have now selected a plausible best model for blatter bakery. However, we have
 \subsection{Q-Q plot}
 ```{r , echo=FALSE, results="hide", fig.cap="\\label{fig::QQ}Normal Q-Q plot for the residuals from the lmbest", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
 
-lm_best <- lm(viscosity ~ moisture + protein + ash, data=icecream)
-tmp <- qqnorm(residuals(lm_best), pch=20)
-qqline(residuals(lm_best))
+lm.best <- lm(viscosity ~ protein + ash, data=icecream)
+tmp <- qqnorm(residuals(lm.best), pch=20)
+qqline(residuals(lm.best))
 diff <- (tmp$x - tmp$y)
 ###display value too far from line
 text(tmp$x,tmp$y,ifelse((abs(diff)>20), names(diff),""), pos=3)
@@ -118,7 +119,7 @@ The labeled points are those that deviate the most from the line and represent t
 \subsection{Observed vs Fitted}
 ```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Fitted vs observed ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
 ###observed vs fitted
-plot(icecream$viscosity ~ fitted(lm_best), pch=20, xlab="Fitted", ylab="Observed")
+plot(icecream$viscosity ~ fitted(lm.best), pch=20, xlab="Fitted", ylab="Observed")
 abline(0,1); grid(col="black")
 par(mfrow=c(1,1))
 ```
@@ -127,16 +128,25 @@ We need to compare the actual outputs of our chosen model with the observed valu
 The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as a lot of points are quite far from this ideal line. Our model is therefore not optimal, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
 
 \subsection{Variance inflation factor}
-Variance Inflation factor, or simply put VIF, will allow us to check for depedancies among our factors (multicolinearity). If this is the case, we will remove certain factors that would add redundancies in our model.A VIF above 5 is to be considered a caution and above 10 as a clear sign of multicolinearity.
+Variance Inflation factor, or simply put VIF, will allow us to check for depedancies among our factors (multicolinearity). If this is the case, we will remove certain factors that would add redundancies in our model. A VIF above 5 is to be considered a caution and above 10 as a clear sign of multicolinearity.
 Let's use VIF on our best model:
 
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, message=FALSE, echo=FALSE, warning=FALSE, results="hidden"}
 require(car)
-kable(vif(lm_best), col.names = c("VIF"))
+vif_ <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs = TRUE) 
 
 ```
 
-We can see that the values are even below 5, indicating no colinearity amoung these three factors. Hence, our model does not contain too much parameter, or at least dependant factors. Therefore, VIF cannot really explain the difference between our model outputs and the observed data from figure 3.
+\begin{table}[H]
+\parbox{\textwidth}{
+      \vspace{0.3cm}
+      `r vif_`
+      \caption{\label{table:vif_}Vif values}
+      }
+\end{table}
+
+
+We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too much parameter, or at least dependant factors. Therefore, VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The obvious answer (to be explored!) could be our model lacks some relevant data brough by another/other parameter(s).
 
 \section{Conclusion}
 ????
