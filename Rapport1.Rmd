@@ -34,7 +34,7 @@ library(xtable)
 \rfoot{Page \thepage}
 
 \begin{center}
-\LARGE{\bfseries{Finding the best parametrization model for ice cream blatter}}
+\LARGE{\bfseries{Finding the best parametrization for ice cream batter}}
 \end{center}
 
 ```{r LoadData, echo=FALSE}
@@ -55,7 +55,7 @@ str(icecream)
 
 \section{Introduction}
 Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
-To prevent this situation, they evaluated the quality of the baffer used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We developed a model to clarify the relationship between these elements  
+To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements  .
 
 \section{Multiple regression analysis}
 \subsection{Pairwise simple correlations}
@@ -113,7 +113,7 @@ rm(tmp,diff)
 ```
 
 We display the Q-Q plot to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
-The labeled points are those that deveviate the most from the line and represent the extreme cases. [Explain why ...]
+The labeled points are those that deviate the most from the line and represent the extreme cases. (Si on a pas d'explication d'ici la) --> Note that we work here with a small amount of data (*n=35*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" anormal phenomenon as they may occur frequently with such a small data set. [Explain why ...]
 
 \subsection{Observed vs Fitted}
 ```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Fitted vs observed ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
