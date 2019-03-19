@@ -155,5 +155,5 @@ We can see that the values are even below 5, indicating no colinearity amoung th
 \section{Conclusion}
 GUILLAUME ON COMPTE SUR TOI !!!!
 
-\section{}
+\section{References}
 [1] V.T.Huanga, J.B.Lindamood1 & P.M.T.Hansen - Ice-cream cone baking: dependence of baking performance on flour and batter viscosity, 1988
