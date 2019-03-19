@@ -40,9 +40,9 @@ library(xtable)
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
-# setwd("C:\\Users\\Florent\\Documents\\R\\Projet")
+ setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
 # setwd("C:\\Users\\Emile....")
- setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
+# setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
 # setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 
 # Clear variables
