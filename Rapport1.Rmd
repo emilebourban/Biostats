@@ -120,16 +120,20 @@ backtable <- kable(model.backward[-4],format = "latex", booktabs = TRUE)
 \begin{table}
 \footnotesize
 \center
-\vspace{-1cm}
+\vspace{0cm}
 \caption*{\center Forward and backward model selection for the three different parameters (ash, protein and mositure). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
 \parbox{.45\textwidth}{
-      \caption{\label{table:forward}Forward model selection}  
-      \vspace{0.3cm}
-      `r fortable`}
+      \vspace{0.1cm}
+      `r fortable`
+      \vspace{0.2cm}
+      \caption{\label{table:forward}Forward model selection}
+      }
 \parbox{.45\textwidth}{
+      \vspace{0.1cm}
+      `r backtable`
+      \vspace{0.2cm}
       \caption{\label{table:backward}Backward model selection} 
-      \vspace{0.3cm}
-      `r backtable`}
+      }
 \end{table}
 
 \subsubsection{Backward selection} 
@@ -143,7 +147,7 @@ One of the shortcomings of this algorithm is that can sometimes stop short. Inde
 \subsubsection{Stepwise selection}
 
 
-```{r AIC Step, echo=FALSE, results='hide'}
+```{r AIC Step, echo=FALSE, results='hide', fig.pos="H",fig.align="center"}
 lms <- step(lm(icecream.lm, data = icecream))
 
 AICstep <- stepAIC(icecream.lm, test = "F", scope = ~ moisture + ash + protein)
@@ -153,14 +157,20 @@ stepaictable <- kable(AICstep$anova[-c(2,3,4)], format = "latex", booktabs = TRU
 #summary(AICstep)$adj.r.squared
 ```
 
-\begin{table}
+\begin{table}[H]
 \footnotesize
 \center
-\vspace{-1cm}
-\parbox{.45\textwidth}{
-      \caption{\label{table:stepaictable}stepwise model selection table}  
+\vspace{-0.5cm}
+\center
+\parbox{\textwidth}{
+      \begin{center}
       \vspace{0.3cm}
-      `r stepaictable`}
+      `r stepaictable`
+      \vspace{0cm}
+      \caption{
+      \label{table:stepaictable}stepwise model selection table}
+      \end{center}
+        }
 \end{table}
 
 Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in \ref{table:stepaictable}; the stepwise selection gives the same result as backward selection (i.e. without moisture) which is why we will keep this model for further enquiries.
