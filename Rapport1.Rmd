@@ -20,11 +20,14 @@ geometry: margin=2.5cm
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls(all=TRUE))
+
 library(rmarkdown)
 library(knitr)
 library(xtable)
 library(car)
 library(carData)
+library(MASS)
 ```
 
 \setlength{\parskip}{0em}
@@ -42,7 +45,7 @@ library(carData)
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
- setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
+#setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
 # setwd("C:\\Users\\Emile....")
 # setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
 # setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
@@ -51,7 +54,7 @@ library(carData)
 rm(list=ls(all=TRUE))
 # Load Data
 icecream <- read.csv("icecream.csv")
-# str(icecream)
+str(icecream)
 ```
 
 <!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
@@ -94,11 +97,75 @@ pairs( ~ moisture + protein + ash, data=icecream)
 ```
 
 \subsection{Model selection}
-Emile
-\subsubsection{Forward selection} 
-Emile
+
+
+In order to be able to judge the validity of our different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we chose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
+To chose the best model, there are different methods that we can use. The most simple approach would be a to compute all the different models and chose only that with the best AIC. This could easily be done in our case here, since the model is small, there would only be 9 different models to test, but it would become computationally demanding if the model was scaled up. For this reason, we used and compared 3 different methods: backward, forward and stepwise selection.
+
+```{r forwardbackward, echo=FALSE}
+icecream.lm <- lm(viscosity ~ moisture + protein + ash, data=icecream)
+icecream.lm.null <- lm(viscosity ~ 1, data=icecream)
+
+model.forward <- round(add1(icecream.lm.null, test="F", scope = ~ moisture + ash +protein), 2)
+model.forward <- model.forward[-2]
+
+model.backward <- round(drop1(icecream.lm, test="F"),2)
+model.backward <- model.backward[-2]
+
+fortable <- kable(model.forward[-4], format = "latex", booktabs = TRUE)
+backtable <- kable(model.backward[-4],format = "latex", booktabs = TRUE)
+
+```
+
+\begin{table}
+\footnotesize
+\center
+\vspace{-1cm}
+\caption*{\center Forward and backward model selection for the four different parameters (pop15, pop75, dpi and ddpi). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
+\parbox{.45\textwidth}{
+      \caption{\label{table:forward}Forward model selection}  
+      \vspace{0.3cm}
+      `r fortable`}
+\parbox{.45\textwidth}{
+      \caption{\label{table:backward}Backward model selection} 
+      \vspace{0.3cm}
+      `r backtable`}
+\end{table}
+
 \subsubsection{Backward selection} 
-Emile
+The backward selection consists of computing the AIC for the full model, and remove the feature that has the largest AIC if its pvalue is higher than a certain threshold (0.05 in our case). As we can see in \ref{table:backward}, with this method only 'moisture' is removed.
+
+
+\subsubsection{Forward selection} 
+The forward selection on the other hand starts with the smallest sub-model that we tolerate and adds a parameter with lowest AIC if P-value < 0.05
+One of the shortcomings of this algorithm is that can sometimes stop short. Indeed, as we can see from \ref{table:forward}, with forward selection, our best model consits of only ash, and the variables protein and moisture are not selected, and so it has one less parameter than the backward selection.
+
+\subsubsection{Stepwise selection}
+
+
+```{r AIC Step, echo=FALSE, results='hide'}
+lms <- step(lm(icecream.lm, data = icecream))
+
+AICstep <- stepAIC(icecream.lm, test = "F", scope = ~ moisture + ash + protein)
+# also removes dpi
+
+stepaictable <- kable(AICstep$anova[-c(2,3,4)], format = "latex", booktabs = TRUE)
+#summary(AICstep)$adj.r.squared
+```
+
+\begin{table}
+\footnotesize
+\center
+\vspace{-1cm}
+\caption*{\center Forward and backward model selection for the three different parameters (ash, protein and moisture). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
+\parbox{.45\textwidth}{
+      \caption{\label{table:stepaictable}stepaic table model selection}  
+      \vspace{0.3cm}
+      `r stepaictable`}
+\end{table}
+
+Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in \ref{table:stepaictable}; the stepwise selection gives the same result as backward selection (i.e. without moisture) which is why we will keep this model for further enquiries.
+
 
 \section{Regression diagnostics}
 We have now selected a plausible best model for blatter bakery. However, we have to ensure this model is robust and well suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
