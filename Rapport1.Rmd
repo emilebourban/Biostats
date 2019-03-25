@@ -182,7 +182,7 @@ rm(tmp,diff)
 ```
 
 We display the Q-Q plot to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
-The labeled points are those that deviate the most from the line and represent the extreme cases. (Si on a pas d'explication d'ici la) --> Note that we work here with a small amount of data (*n=39*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" anormal phenomenon as they may occur frequently with such a small data set.
+The labeled points are those that deviate the most from the line and represent the extreme cases. Note that we work here with a small amount of data (*n=39*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" anormal phenomenon as they may occur frequently with such a small data set.
 
 \subsection{Observed vs Fitted}
 ```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Fitted vs observed ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
