@@ -60,7 +60,7 @@ icecream <- read.csv("icecream.csv")
 
 \section{Introduction}
 Manufacturing ice cream cones requires baking of a batter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
-To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements  .
+To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements.
 
 \section{Multiple regression analysis}
 \subsection{Pairwise simple correlations}
@@ -115,10 +115,10 @@ backtable <- kable(model.backward[-4],format = "latex", booktabs = TRUE)
 ```
 
 \subsubsection{Backward selection} 
-The backward selection consists of computing the AIC for the full model, and remove the feature that has the largest AIC if its pvalue is higher than a certain threshold (0.05 in our case). As we can see in Table \ref{table:F_B}b, with this method only 'moisture' is removed.
+The backward selection consists of computing the AIC for the full model, and remove the feature that has the largest AIC if its *p-value* is higher than a certain threshold (0.05 in our case). As we can see in Table \ref{table:F_B}b, with this method only 'moisture' is removed.
 
 \subsubsection{Forward selection} 
-The forward selection on the other hand starts with the smallest sub-model that we tolerate and adds a parameter with lowest AIC if P-value < 0.05
+The forward selection on the other hand starts with the smallest sub-model that we tolerate and adds a parameter with lowest AIC if *p-value* < 0.05.  
 One of the shortcomings of this algorithm is that can sometimes stop short. Indeed, as we can see from Table \ref{table:F_B}a, with forward selection, our best model consits of only ash, and the variables protein and moisture are not selected, and so it has one less parameter than the backward selection.
 
 \begin{table}[H]
@@ -137,7 +137,7 @@ One of the shortcomings of this algorithm is that can sometimes stop short. Inde
       \vspace{0.2cm}
       \label{table:backward}\textbf{(b)} Backward model selection
       }
-\caption{\label{table:F_B}Forward and backward model selection for the three different parameters (ash, protein and mositure). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05.}
+\caption{\label{table:F_B}Forward and backward model selection for the three different parameters (ash, protein and mositure). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the \textit{p-valu}e ($Pr(>F)$) is inferior to 0.05.}
 \end{table}
 
 \subsubsection{Stepwise selection}
@@ -152,7 +152,7 @@ stepaictable <- kable(AICstep$anova[-c(2,3,4)], format = "latex", booktabs = TRU
 #summary(AICstep)$adj.r.squared
 ```
 
-Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in Table \ref{table:stepaictable}; the stepwise selection gives the same result as backward selection (i.e. without moisture) which is why we will keep this model for further enquiries.
+Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in Table \ref{table:stepaictable}, the stepwise selection gives the same result as backward selection (i.e. without moisture) which is why we will keep this model for further enquiries.
 
 \begin{table}[H]
 \footnotesize
@@ -220,7 +220,7 @@ viftable <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs
       }
 \end{table}
 
-We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant data brought by another/other parameter(s).
+We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant data brought by another/other parameter(s). CETTE DERNIèRE PHRASE DOIT ÊTRE REVUE, NON ???
 
 \section{Conclusion}
 Through this report, we've studied data from batter caracteristics and tried to develop a model from it. First, we've explored the different relationships between the parameters and see if some are correlated or not. Then we've continued our analysis with the selection of the best model to describe the viscosity of the batter. With the 3 methods used, the best estimated model was depending on only 2 factors : the ash and protein content. Finally, once the model selected, the last step is to check if it is adequate or not. QQ-plot and comparison of fitted vs observed data showed mixed results, underlying  that the model isn't perfect but remains solid. Supplementary verification with VIF confirmed that our model doesn't contain too many parameters, so in order to obtain an optimal model, we would maybe have to use more data to work with. 
