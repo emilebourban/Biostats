@@ -48,7 +48,7 @@ library(MASS)
 #setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
 # setwd("C:\\Users\\Emile....")
 # setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
-# setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
+ setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 
 # Clear variables
 rm(list=ls(all=TRUE))
@@ -60,7 +60,7 @@ icecream <- read.csv("icecream.csv")
 <!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
 
 \section{Introduction}
-Manufacturing ice cream cones requies baking of a blatter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
+Manufacturing ice cream cones requies baking of a batter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
 To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements  .
 
 \section{Multiple regression analysis}
@@ -167,7 +167,7 @@ Stepwise selection is a mix of both backward and forward selection: we start wit
 
 
 \section{Regression diagnostics}
-We have now selected a plausible best model for blatter bakery. However, we have to ensure this model is robust and well suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
+We have now selected a plausible best model for batter bakery. However, we have to ensure this model is robust and well suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
 
 \subsection{Q-Q plot}
 ```{r , echo=FALSE, results="hide", fig.cap="\\label{fig::QQ}Normal Q-Q plot for the residuals from the lmbest", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="100%", fig.align="center", fig.pos="H"}
@@ -216,10 +216,10 @@ viftable <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs
       }
 \end{table}
 
-We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too much parameter, or at least dependant factors. Therefore, VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The obvious answer (to be explored!) could be our model lacks some relevant data brough by another/other parameter(s).
+We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant data brought by another/other parameter(s).
 
 \section{Conclusion}
-GUILLAUME ON COMPTE SUR TOI !!!!
+Through this report, we've studied data from batter caracteristics and tried to develop a model from it. First, we've explored the different relationships between the parameters and see if some are correlated or not. Then we've continued our analysis with the selection of the best model to describe the viscosity of the batter. With the 3 methods used, the best estimated model was depending on only 2 factors : the ash and protein content. Finally, once the model selected, the last step is to check if it is adequate or not. QQ-plot and comparison of fitted vs observed data showed mixed results, underlying  that the model isn't perfect but remains solid. Supplementary verification with VIF confirmed that our model doesn't contain too many parameters, so in order to obtain an optimal model, we would maybe have to use more data to work with. 
 
 \section{References}
 [1] V.T.Huanga, J.B.Lindamood1 & P.M.T.Hansen - Ice-cream cone baking: dependence of baking performance on flour and batter viscosity, 1988
