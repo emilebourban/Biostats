@@ -54,7 +54,7 @@ library(MASS)
 rm(list=ls(all=TRUE))
 # Load Data
 icecream <- read.csv("icecream.csv")
-str(icecream)
+#str(icecream)
 ```
 
 <!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
@@ -99,8 +99,8 @@ pairs( ~ moisture + protein + ash, data=icecream)
 \subsection{Model selection}
 
 
-In order to be able to judge the validity of our different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we chose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
-To chose the best model, there are different methods that we can use. The most simple approach would be a to compute all the different models and chose only that with the best AIC. This could easily be done in our case here, since the model is small, there would only be 9 different models to test, but it would become computationally demanding if the model was scaled up. For this reason, we used and compared 3 different methods: backward, forward and stepwise selection.
+In order to be able to judge the validity of our different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we choose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
+To choose the best model, there are different methods that we can use. The most simple approach would be a to compute all the different models and choose only that with the best AIC. This could easily be done in our case here, since the model is small, there would only be 9 different models to test, but it would become computationally demanding if the model was scaled up. For this reason, we used and compared 3 different methods: backward, forward and stepwise selection.
 
 ```{r forwardbackward, echo=FALSE}
 icecream.lm <- lm(viscosity ~ moisture + protein + ash, data=icecream)
@@ -121,7 +121,7 @@ backtable <- kable(model.backward[-4],format = "latex", booktabs = TRUE)
 \footnotesize
 \center
 \vspace{-1cm}
-\caption*{\center Forward and backward model selection for the four different parameters (pop15, pop75, dpi and ddpi). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
+\caption*{\center Forward and backward model selection for the three different parameters (ash, protein and mositure). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
 \parbox{.45\textwidth}{
       \caption{\label{table:forward}Forward model selection}  
       \vspace{0.3cm}
@@ -157,9 +157,8 @@ stepaictable <- kable(AICstep$anova[-c(2,3,4)], format = "latex", booktabs = TRU
 \footnotesize
 \center
 \vspace{-1cm}
-\caption*{\center Forward and backward model selection for the three different parameters (ash, protein and moisture). For both tables, the lower the RSS and the AIC, the better the model. The parameter is added to the model if the P-value ($Pr(>F)$) is inferior to 0.05}
 \parbox{.45\textwidth}{
-      \caption{\label{table:stepaictable}stepaic table model selection}  
+      \caption{\label{table:stepaictable}stepwise model selection table}  
       \vspace{0.3cm}
       `r stepaictable`}
 \end{table}
