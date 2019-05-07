@@ -92,12 +92,11 @@ Figure 1 and Table 1 show that the strongest linear relation is between the prot
         }
 \end{table}
 
-+VISCOSITY ?????
++VISCOSITY ???????????????????????????????????????????????
 
 ```{r pairwise regression, echo=FALSE, results="hide", fig.cap="\\label{fig:correlations} Pairwise scatter plot for all predictive variables", out.extra='trim={0 0.7cm 0 0.7cm},clip', out.width="100%", fig.align="center"}
 pairs( ~ moisture + protein + ash, data=icecream)
 ```
-
 
 \subsection{Model selection}
 In order to be able to judge the quality of different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we choose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
@@ -145,7 +144,6 @@ One of the shortcomings of this algorithm is that can sometimes stop short. Inde
 \end{table}
 
 \subsubsection{Stepwise selection}
-
 ```{r AIC Step, echo=FALSE, results='hide', fig.pos="H",fig.align="center"}
 lms <- step(lm(icecream.lm, data = icecream))
 
