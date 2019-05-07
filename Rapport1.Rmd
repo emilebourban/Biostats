@@ -59,12 +59,12 @@ icecream <- read.csv("icecream.csv")
 <!-- L'assistant a dit : Explorer le model, en essayé plrs puis choisr celui qu'on pense le meilleur, puis après afficher les résultats du modèle chosit et voir par exemple les valeur extremes ! -->
 
 \section{Introduction}
-Manufacturing ice cream cones requires baking of a batter before rolling it into specifical conic shapes. This batter is compoosed of many ingredients (flour, sugar, water ..) and its quality is a crucial point that was studied by three scientists in a paper [1] they published in 1988. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
-To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we studied is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explored the data and developed a model to clarify the relationship between these elements.
+Manufacturing ice cream cones requires baking of a batter before rolling it into specifical conic shapes. This batter is composed of many ingredients (flour, sugar, water, \textit{etc}), and its quality is a crucial point that was studied in [1]. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
+To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we study is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explore the data and develop a model to clarify the relationship between these elements.
 
 \section{Multiple regression analysis}
 \subsection{Pairwise simple correlations}
-As a dataset is the measure of several variables, the first thing to do is to explore it. Indeed, we first determine the inter-relation between the different predicitive factors and look at their correlation. In order to do so, we look at scatter plots, that display all the bivariate relations between the three parameters. This pairwise correlation of all predictive variables allows to better see the relationships between pairs of variable. Moreover, we compute the correlation coefficent, which is the strength of the association between two variables.
+We first asses the inter-relation between the different predictor variables and look at their correlation. We also look at all pairwise scatter plots.
 
 ```{r covariances and correlations, echo=FALSE, results="hide"}
 covariances <- round(cov(icecream[c(2,3,4)]),2)
@@ -74,30 +74,34 @@ covtable <- kable(xtable(covariances), format = "latex", booktabs = TRUE)
 cortable <- kable(xtable(correlations),format = "latex", booktabs = TRUE)
 ```
 
-According to Figure 1 and Table 1, we can observe that the strongest relation is between the protein and ash contents. Indeed, their correlation coeffcient r=`r correlations["ash","protein"]`, which is the closest to |r|=1. This is likely due to the fact that proteins can capture inorganic materials (i.e. the ashes) easier than the moisture does. Indeed, the moisture is made of molecules of water and have no charges to interact with ashes which are most of the time charged as the proteins. Looking at the correlation coefficients of moisture with protein and ash (r=`r correlations["moisture","protein"]` and r=`r correlations["moisture","ash"]` respectively), we see that they are both negative, close to each other and not so strong. 
+Figure 1 and Table 1 show that the strongest linear relation is between the protein and ash contents (|r|=`r correlations["ash","protein"]`). This is likely due to the fact that proteins can capture inorganic materials (\textit{i.e.} the ashes) easier than the moisture does: moisture is made of molecules of water and have no charges to interact with ashes, which are most of the time charged as are the proteins. Looking at the correlation coefficients of moisture with protein and ash (r=`r correlations["moisture","protein"]` and r=`r correlations["moisture","ash"]`, respectively), we see that they are both negative, close to each other and not so strong. 
 
 \begin{table}[H]
 \footnotesize
 \center
-\parbox{.45\textwidth}{
+\vspace{-0.5cm}
+\center
+\parbox{\textwidth}{
+      \begin{center}
       \vspace{0.3cm}
       `r cortable`
-      \caption{\label{table:correlations}Correlation values}
-      }
-\parbox{.45\textwidth}{
-      \vspace{0.3cm}
-      `r covtable`
-      \caption{\label{table:covariances}Covariances values}
-      }
+      \vspace{0cm}
+      \caption{
+      \label{table:stepaictable}Correlation values betweene pairs of variables}
+      \end{center}
+        }
 \end{table}
+
++VISCOSITY ?????
 
 ```{r pairwise regression, echo=FALSE, results="hide", fig.cap="\\label{fig:correlations} Pairwise scatter plot for all predictive variables", out.extra='trim={0 0.7cm 0 0.7cm},clip', out.width="100%", fig.align="center"}
 pairs( ~ moisture + protein + ash, data=icecream)
 ```
 
+
 \subsection{Model selection}
-In order to be able to judge the validity of our different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we choose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
-To choose the best model, there are different methods that we can use. The most simple approach would be to compute all the different models and choose only that with the best AIC. This could easily be done in our case here, since the model is small, there would only be 9 different models to test, but it would become computationally demanding if the model was scaled up. For this reason, we used and compared 3 different methods: backward, forward and stepwise selection.
+In order to be able to judge the quality of different models, we need to use some criteria of comparison like AIC (Akaike Criterion) or adjusted R-squared. Here we choose to use the AIC because the R squared always improves with model complexity whereas AIC allows us to achieve a good balance between model complexity and model fit.
+To choose the best model, there are different methods that we can use. The most simple approach would be to compute all the different models and choose only that with the best AIC. This could easily be done in our case here, since the model is small, there would only be 9 different models to test, but it would become computationally demanding if the models were to scaled up. For this reason, we used and compared 3 different methods: backward, forward and stepwise selection.
 
 ```{r forwardbackward, echo=FALSE}
 icecream.lm <- lm(viscosity ~ moisture + protein + ash, data=icecream)
@@ -115,11 +119,11 @@ backtable <- kable(model.backward[-4],format = "latex", booktabs = TRUE)
 ```
 
 \subsubsection{Backward selection} 
-The backward selection consists of computing the AIC for the full model, and remove the feature that has the largest AIC if its *p-value* is higher than a certain threshold (0.05 in our case). As we can see in Table \ref{table:F_B}b, with this method only 'moisture' is removed.
+Backward selection consists of computing the AIC for the full model, and remove the feature that has the largest AIC if its *p-value* is higher than a certain threshold (0.05 in our case). As we can see in Table \ref{table:F_B}b, with this method only 'moisture' is removed.
 
 \subsubsection{Forward selection} 
-The forward selection on the other hand starts with the smallest sub-model that we tolerate and adds a parameter with lowest AIC if *p-value* < 0.05.  
-One of the shortcomings of this algorithm is that can sometimes stop short. Indeed, as we can see from Table \ref{table:F_B}a, with forward selection, our best model consits of only ash, and the variables protein and moisture are not selected, and so it has one less parameter than the backward selection.
+Forward selection on the other hand starts with the smallest sub-model that we tolerate and adds a parameter with lowest AIC if *p-value* < 0.05.  
+One of the shortcomings of this algorithm is that can sometimes stop short. Indeed, as we can see from Table \ref{table:F_B}a, with forward selection, our best model consits of only ash, and the variables protein and moisture are not selected, and so it has one fewer variable than the backward selection.
 
 \begin{table}[H]
 \footnotesize
@@ -152,7 +156,7 @@ stepaictable <- kable(AICstep$anova[-c(2,3,4)], format = "latex", booktabs = TRU
 #summary(AICstep)$adj.r.squared
 ```
 
-Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in Table \ref{table:stepaictable}, the stepwise selection gives the same result as backward selection (i.e. without moisture) which is why we will keep this model for further enquiries.
+Stepwise selection is a mix of both backward and forward selection: we start with any given model, and do a step of forward selection followed by one of backward selection until no more variable is added / eliminated. Here, as we can see in Table \ref{table:stepaictable}, the stepwise selection gives the same result as backward selection (\textit{i.e.} without moisture), which is why we will keep this model.
 
 \begin{table}[H]
 \footnotesize
@@ -165,17 +169,17 @@ Stepwise selection is a mix of both backward and forward selection: we start wit
       `r stepaictable`
       \vspace{0cm}
       \caption{
-      \label{table:stepaictable}stepwise model selection table}
+      \label{table:stepaictable}Stepwise model selection table}
       \end{center}
         }
 \end{table}
 
 \section{Regression diagnostics}
-We have now selected a plausible best model for batter bakery. However, we have to ensure this model is robust and well suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
+We have now selected a plausible best model for batter bakery. However, we have to ensure this model is robust and well-suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
 
 \subsection{Q-Q plot}
-We display the Q-Q plot to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
-The labeled points are those that deviate the most from the line and represent the extreme cases. Note that we work here with a small amount of data (*n=39*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" anormal phenomena as they may occur frequently with such a small data set.
+We display the Q-Q plot (Figure 2) to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
+The labeled points are those that deviate the most from the line and represent the extreme cases. Note that we work here with a small amount of data (*n=39*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" abnormal phenomena as they may occur frequently with such a small data set.
 
 ```{r , echo=FALSE, results="hide", fig.cap="\\label{fig::QQ}Normal Q-Q plot for the residuals from the lmbest", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="75%", fig.align="center", fig.pos="H"}
 
@@ -190,9 +194,9 @@ rm(tmp,diff)
 
 \subsection{Observed vs Fitted}
 We need to compare the actual outputs of our chosen model with the observed values. This comparison is represented in Figure 3.
-The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as a lot of points are quite far from this ideal line. Our model is therefore not optimal, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
+The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as many points are quite far from this ideal line. the model is therefore not optimal, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
 
-```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Fitted vs observed ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="75%", fig.align="center", fig.pos="H"}
+```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Observed vs fitted ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="75%", fig.align="center", fig.pos="H"}
 ###observed vs fitted
 plot(icecream$viscosity ~ fitted(lm.best), pch=20, xlab="Fitted", ylab="Observed")
 abline(0,1); grid(col="black")
@@ -200,7 +204,7 @@ par(mfrow=c(1,1))
 ```
 
 \subsection{Variance inflation factor}
-Variance Inflation factor, or simply put VIF, will allow us to check for depedancies among our factors (multicolinearity). If this is the case, we will remove certain factors that would add redundancies in our model. A VIF above 5 is to be considered a caution and above 10 as a clear sign of multicolinearity.
+Variance Inflation factor, or simply put VIF, will allow us to check for dependencies among our factors (multicolinearity). If this is the case, we will remove certain factors that would add redundancies in our model. A VIF above 5 is to be considered a caution and above 10 as a clear sign of multicolinearity.
 Let's use VIF on our best model:
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE, results="hidden"}
@@ -220,10 +224,10 @@ viftable <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs
       }
 \end{table}
 
-We can see that the values are even below 5, indicating no colinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant data brought by another/other parameter(s). CETTE DERNIèRE PHRASE DOIT ÊTRE REVUE, NON ???
+We can see that the values are even below 5, indicating no collinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant variable(s).
 
 \section{Conclusion}
-Through this report, we've studied data from batter caracteristics and tried to develop a model from it. First, we've explored the different relationships between the parameters and see if some are correlated or not. Then we've continued our analysis with the selection of the best model to describe the viscosity of the batter. With the 3 methods used, the best estimated model was depending on only 2 factors : the ash and protein content. Finally, once the model selected, the last step is to check if it is adequate or not. QQ-plot and comparison of fitted vs observed data showed mixed results, underlying  that the model isn't perfect but remains solid. Supplementary verification with VIF confirmed that our model doesn't contain too many parameters, so in order to obtain an optimal model, we would maybe have to use more data to work with. 
+We have developed a linear model to predict viscosity from ice cream cone batter characteristics. First, we explored the relationships between variables to see whether some are correlated. Next, we selected the best model to describe the batter viscosity as a function of the other variables in the data set. The best estimated model depends on only two variables: the ash and protein content. Finally, once the model is selected, the last step is to check if it is adequate or not. QQ-plot and comparison of fitted vs observed data showed mixed results, underlying  that the model isn't perfect but remains solid. Supplementary verification with VIF confirmed that our model does not contain too many parameters, so in order to obtain an optimal model, we would maybe have to use more data to work with. 
 
 \section{References}
 [1] V.T.Huanga, J.B.Lindamood1 & P.M.T.Hansen - Ice-cream cone baking: dependence of baking performance on flour and batter viscosity, 1988
