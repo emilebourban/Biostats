@@ -15,7 +15,7 @@ output:
 fontsize: 12pt
 numbersections: true
 fig_caption: yes
-geometry: margin=2.5cm
+geometry: margin=2.1cm
 ---
 
 ```{r setup, include=FALSE}
