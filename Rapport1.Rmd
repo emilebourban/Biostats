@@ -45,8 +45,8 @@ library(MASS)
 ```{r LoadData, echo=FALSE}
 # Set the working directory :
 
-  setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
-# setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
+#  setwd("C:\\Users\\Florent\\Documents\\\\GitHub\\Biostats")
+ setwd("C:\\Users\\Georges\\Documents\\GitHub\\Biostats")
 # setwd("C:\\Users\\gpill\\Documents\\GitHub\\Biostats")
 
 # Clear variables
@@ -172,17 +172,17 @@ Stepwise selection is a mix of both backward and forward selection: we start wit
 \end{table}
 
 \section{Regression diagnostics}
-We have now selected a plausible best model for batter bakery. However, we have to ensure this model is robust and well-suited. We will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
+We have now selected a plausible best model for batter bakery. However, we have to ensure this model is robust and well-suited, meaning the predicted values do not deviate much from the real values. The goal is to have the minimal difference between both and have these differences equally distributed. Thus, we would be sure the model is not biased. Hence, we will compare the predicted value of the model with the real obtained values, as well as comparing some data with other possible models.
 
 \subsection{Q-Q plot}
-We display the Q-Q plot (Figure 2) to see if our data are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
+We display the Q-Q plot (Figure 2) to assess whether the residuals are normally distributed. Indeed, they should be close to the line y=x to infer a normal distribution. Unfortunately, this is not the case here, as one tail is far away from the line.
 The labeled points are those that deviate the most from the line and represent the extreme cases. Note that we work here with a small amount of data (*n=39*) and QQ-plots tend to stabilize with larger number of values. We shouldn't try to "over-interpret" abnormal phenomena as they may occur frequently with such a small data set.
 
 ```{r , echo=FALSE, results="hide", fig.cap="\\label{fig::QQ}Normal Q-Q plot for the residuals from the lmbest", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="75%", fig.align="center", fig.pos="H"}
 
 lm.best <- lm(viscosity ~ protein + ash, data=icecream)
-tmp <- qqnorm(residuals(lm.best), pch=20)
-qqline(residuals(lm.best))
+tmp <- qqnorm(residuals(lm.best), pch=20, ylab = "Square sample quantiles")
+qqline(residuals(lm.best), ylab = "Square sample quantiles")
 diff <- (tmp$x - tmp$y)
 ###display value too far from line
 text(tmp$x,tmp$y,ifelse((abs(diff)>20), names(diff),""), pos=3)
@@ -191,7 +191,7 @@ rm(tmp,diff)
 
 \subsection{Observed vs Fitted}
 We need to compare the actual outputs of our chosen model with the observed values. This comparison is represented in Figure 3.
-The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as many points are quite far from this ideal line. the model is therefore not optimal, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
+The ideal data would follow the line y = x, meaning the modeled values are exactly equaled to the observed ones. This is not the case with our model, as many points are quite far from this ideal line. Therefore, the model does not predict perfectly the values and present some deviation from the real values, as either we miss some parameters or some of them give wrong information. The next step to determine if our model could be improved is to look at the variance inflation factor (VIF).
 
 ```{r, echo=FALSE, results="hide", fig.cap="\\label{fig::fitted}Observed vs fitted ratio", out.extra='trim={0 0.5cm 0 2cm},clip', out.width="75%", fig.align="center", fig.pos="H"}
 ###observed vs fitted
@@ -206,7 +206,7 @@ Let's use VIF on our best model:
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE, results="hidden"}
 require(car)
-viftable <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs = TRUE, digits = 2)
+viftable <- kable(format(round(vif(lm.best), 2), nsmall = 2), col.names = c("VIF"), format = "latex", booktabs = TRUE, digits = 2)
 ```
 
 \begin{table}[H]
@@ -221,7 +221,7 @@ viftable <- kable(vif(lm.best), col.names = c("VIF"), format = "latex", booktabs
       }
 \end{table}
 
-We can see that the values are even below 5, indicating no collinearity amoung these two factors. Hence, our model does not contain too many parameters, or at least dependant factors. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant variable(s).
+We can see that the values are even below 5, which indicates that they are not dependant or collinear. Hence, the variables are both relevant in the model, as one cannot be defined from the other. Therefore, the VIF cannot really explain the difference between our model outputs and the observed data from figure 3. The most plausible answer (to be explored with more data!) could be that our model lacks some relevant variable(s).
 
 \section{Conclusion}
 We have developed a linear model to predict viscosity from ice cream cone batter characteristics. First, we explored the relationships between variables to see whether some are correlated. Next, we selected the best model to describe the batter viscosity as a function of the other variables in the data set. The best estimated model depends on only two variables: the ash and protein content. Finally, once the model is selected, the last step is to check if it is adequate or not. QQ-plot and comparison of fitted vs observed data showed mixed results, underlying  that the model isn't perfect but remains solid. Supplementary verification with VIF confirmed that our model does not contain too many parameters, so in order to obtain an optimal model, we would maybe have to use more data to work with. 
