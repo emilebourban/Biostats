@@ -57,8 +57,7 @@ icecream <- read.csv("icecream.csv")
 ```
 
 \section{Introduction}
-Manufacturing ice cream cones requires baking of a batter before rolling it into specifical conic shapes. This batter is composed of many ingredients (flour, sugar, water, \textit{etc}), and its quality is a crucial point that was studied in [1]. The stake of this study was to optimize the automatization of the manufacturing. Indeed, different problems may emerge from too thin (sticking problem) or too thick (uniformity problem) batter.  
-To prevent this situation, they evaluated the quality of the batter used to prepare the cones depending on several factors. The factor we study is the viscosity of the flour, influenced by its content in moisture, protein and ash. We explore the data and develop a model to find the relationship between these elements.
+Manufacturing ice cream cones requires a crucial step : baking of a batter before rolling it into specifical conic shapes. This batter is first poured into specific molds, then baked, removed and finally rolled. The quality of the batter depends on the \textit{baking performance} of the flour used to make the batter. In a 1998 study [1], scientists have demonstrated the relationship between baking performance and batter viscosity. The stake of our report is to analyze the composition in moisture, ash and proteins of different batters to clarify the influence of these components on the batter viscosity and thus on its baking performance. For this purpose, we will build a model for the viscosity and see whether all the variables are relevant or not.
 
 \section{Multiple regression analysis}
 \subsection{Pairwise simple correlations}
